@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+             xmlns:tns="http://localhost/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             name="PositionCreate"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+    <types>
+        <xsd:schema xmlns:tns="http://schemas.xmlsoap.org/wsdl/"
+                    xmlns="http://www.w3.org/2001/XMLSchema"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    elementFormDefault="qualified"
+                    targetNamespace="http://localhost/">
+            <xsd:element name="Auth">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="login" type="string" minOccurs="1" maxOccurs="1"/>
+                        <xsd:element name="password" type="string" minOccurs="1" maxOccurs="1"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:complexType name="PositionUpdate">
+                <xsd:sequence>
+                    <xsd:element name="name" type="string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="full_name" type="string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="import_id" type="string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="unit_name" type="string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="rubric_import_id" type="string" minOccurs="1" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:element name="PositionUpdateResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="position_id" type="string" minOccurs="1" maxOccurs="1"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="processPositionUpdateRequest">
+                <xsd:complexType>
+                    <xs:sequence>
+                        <xs:element name="auth" type="Auth"/>
+                        <xs:element name="positionUpdate" type="PositionUpdate"/>
+                    </xs:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </types>
+    <message name="processPositionUpdateRequest">
+        <part name="PositionUpdate" element="tns:PositionUpdate"/>
+    </message>
+    <message name="processPositionUpdateResponse">
+        <part name="PositionUpdateResponse" element="tns:PositionUpdateResponse"/>
+    </message>
+    <portType name="PositionUpdatePortType">
+        <operation name="process">
+            <input message="tns:processPositionUpdateRequest"/>
+            <output message="tns:processPositionUpdateResponse"/>
+        </operation>
+    </portType>
+    <binding name="PositionUpdateBinding" type="tns:PositionUpdatePortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="process">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="PositionUpdate">
+        <port name="PositionUpdatePort" binding="tns:PositionUpdateBinding">
+            <soap:address location="https://www.b2b-center.ru/soap_nsi/PositionUpdate"/>
+        </port>
+    </service>
+</definitions>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+             xmlns:tns="http://localhost/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             name="CategoryCreate"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+    <types>
+        <xsd:schema xmlns:tns="http://schemas.xmlsoap.org/wsdl/"
+                    xmlns="http://www.w3.org/2001/XMLSchema"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    elementFormDefault="qualified"
+                    targetNamespace="http://localhost/">
+            <xsd:element name="Auth">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="login" type="string" minOccurs="1" maxOccurs="1"/>
+                        <xsd:element name="password" type="string" minOccurs="1" maxOccurs="1"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:complexType name="CategoryCreate">
+                <xsd:sequence>
+                    <xsd:element name="title" type="string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="code" type="string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="id_to_import" type="string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="parent_import_id" type="string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="type" minOccurs="1">
+                        <xsd:simpleType>
+                            <xsd:restriction base="integer">
+                                <xsd:minInclusive value="1"/>
+                                <xsd:maxInclusive value="2"/>
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:element name="CategoryCreateResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="category_id" type="integer" minOccurs="1" maxOccurs="1"/>
+                        <xsd:element name="code" type="string" minOccurs="1" maxOccurs="1"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="processCategoryCreateRequest">
+                <xsd:complexType>
+                    <xs:sequence>
+                        <xs:element name="auth" type="Auth"/>
+                        <xs:element name="categoryCreate" type="CategoryCreate"/>
+                    </xs:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </types>
+    <message name="processCategoryCreateRequest">
+        <part name="CategoryCreate" element="tns:CategoryCreate"/>
+    </message>
+    <message name="processCategoryCreateResponse">
+        <part name="CategoryCreateResponse" element="tns:CategoryCreateResponse"/>
+    </message>
+    <portType name="CategoryCreatePortType">
+        <operation name="process">
+            <input message="tns:processCategoryCreateRequest"/>
+            <output message="tns:processCategoryCreateResponse"/>
+        </operation>
+    </portType>
+    <binding name="CategoryCreateBinding" type="tns:CategoryCreatePortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="process">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="CategoryCreate">
+        <port name="CategoryCreatePort" binding="tns:CategoryCreateBinding">
+            <soap:address location="https://www.b2b-center.ru/soap_nsi/CategoryCreate"/>
+        </port>
+    </service>
+</definitions>
